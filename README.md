@@ -1,12 +1,12 @@
 # MSPJLK_learning-mate
 #민#신#박#장#이#김
 
-[#민] https://github.com/danggin
-[#신] https://github.com/narashin2019
-[#박] https://github.com/suef606
-[#박] https://github.com/janghwahyun
-[#이] https://github.com/revy7289 
-[#김] https://github.com/kimsudang
+> [#민] https://github.com/danggin   
+> [#신] https://github.com/narashin2019   
+> [#박] https://github.com/suef606   
+> [#박] https://github.com/janghwahyun   
+> [#이] https://github.com/revy7289   
+> [#김] https://github.com/kimsudang   
 
 매주 화요일 모임
 * 주차별 세부 주제는 Github readme 파일에 업로드 예정
