@@ -1,6 +1,5 @@
-# MSPJLK_learning-mate
-#민#신#박#장#이#김
-
+# MSPJLK_learning-mate   
+   
 > #민  https://github.com/danggin   
 > #신  https://github.com/narashin2019   
 > #박  https://github.com/suef606   
