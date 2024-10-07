@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>learning-mate week 02 (24.10.08)</title>
+    <!-- ******************** -->
+    <!-- HTML STYLE을 정의합니다 -->
+    <!-- ******************** -->
+    <style>
+      * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        width: 640px;
+        padding: 20px;
+      }
+      fieldset {
+        display: flex;
+        flex-direction: column;
+        border: 0;
+        margin: 10px 0px;
+      }
+      b {
+        font-size: 14px;
+        color: #f55;
+      }
+      input,
+      textarea {
+        display: block;
+        padding: 0;
+        width: 600px;
+        height: 40px;
+        margin: 10px 0px;
+        padding: 4px 8px;
+      }
+      textarea {
+        min-height: 200px;
+        overflow: auto;
+        resize: none;
+      }
+      .writer__section {
+        display: flex;
+        justify-content: space-between;
+      }
+      .author__ID input,
+      .password__ID input {
+        width: 200px;
+      }
+      button {
+        width: 100px;
+        height: 40px;
+        background-color: #ffbe98;
+        border: 0;
+      }
+      button:disabled {
+        background-color: #bbb;
+      }
+    </style>
+    <!-- ********************************* -->
+    <!-- React와 babel을 CDN으로 다운로드 합니다 -->
+    <!-- ********************************* -->
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <!-- ********************************************** -->
+  <!-- React를 사용하여 JSX를 HTML MAIN에 INJECTION 합니다 -->
+  <!-- ********************************************** -->
+  <body>
+    <div>how can check input state without valid function or state</div>
+    <br />
+    <main id="root"></main>
+  </body>
+  <!-- ***************** -->
+  <!-- React 코드를 돌립니다 -->
+  <!-- ***************** -->
+  <script type="text/babel">
+    function App() {
+      //** 필수로 들어가는 4종 INPUT을 STATE로 관리합니다 */
+      const [author, setAuthor] = React.useState("");
+      const [password, setPassword] = React.useState("");
+      const [title, setTitle] = React.useState("");
+      const [content, setContent] = React.useState("");
+      //** 저는 STATE가 비어있는지 채워졌는지 검증하는 로직이 없습니다 */
+      //** 편법을 활용하여 valid 변수 1줄로 INPUT을 강제할 수 있습니다. */
+      //** 만약 4종 INPUT중 비어있는 값이 있다면, valid는 false가 되고, 전부 차 있다면 true입니다. */
+      const valid = author && password && title && content;
+
+      //** INPUT에 값이 들어올 때의 이벤트를 감지하여 함수를 실행합니다 */
+      const handleChange = (event) => {
+        //** 이벤트가 발생한 HTML NODE의 ID를 불러옵니다 */
+        const targetId = event.target.id;
+        //** 이벤트가 발생한 HTML NODE의 value(값)를 불러옵니다 */
+        const targetValue = event.target.value;
+
+        //** switch문으로 id를 대조하고, 일치하는 target의 state modifier 함수를 실행합니다 */
+        //** state 관리 중 set어쩌구 함수들이 modifier함수입니다 (state를 변경해주는 함수) */
+        switch (targetId) {
+          case "author__ID": {
+            setAuthor(targetValue);
+            break;
+          }
+          case "password__ID": {
+            setPassword(targetValue);
+            break;
+          }
+          case "title__ID": {
+            setTitle(targetValue);
+            break;
+          }
+          case "content__ID": {
+            setContent(targetValue);
+            break;
+          }
+        }
+      };
+
+      //** 등록하기 버튼을 클릭했을 때 실행될 함수, alert로 입력한 값을 불러와서 보여줌 */
+      function handleClick() {
+        alert(`
+        작성자는 ${author}
+        비밀번호는 ${password}
+        제목은 ${title}
+        내용 ${content}
+        `);
+      }
+
+      //** InputField라는 이름으로 컴포넌트를 분할하였습니다. */
+      //** 지금 이 컴포넌트에서 props를 내려주어 변경되어야 하는 값은 유동적으로 관리하고 INPUT FORM을 재활용하였습니다. */
+      //** prop또한 재활용 가능하도록 최대한 간결하게 내려줍니다. */
+      return (
+        <>
+          <div className="writer__section">
+            <InputField
+              id="author__ID"
+              placeholder="작성자 명을 입력해 주세요."
+              onChange={handleChange}
+              value={author}
+              required
+            />
+            <InputField
+              id="password__ID"
+              placeholder="비밀번호를 입력해 주세요."
+              onChange={handleChange}
+              value={password}
+              required
+            />
+          </div>
+          <InputField
+            id="title__ID"
+            placeholder="제목을 입력해 주세요."
+            onChange={handleChange}
+            value={title}
+            required
+          />
+          <InputField
+            id="content__ID"
+            placeholder="내용을 입력해 주세요."
+            onChange={handleChange}
+            value={content}
+            required
+          />
+          <InputField id="youtube__ID" placeholder="링크를 입력해 주세요." />
+
+          {/* 위에서 봤던 valid 변수를 통해 버튼의 활성/비활성 상태를 토글합니다 */}
+          {/* 만약 4종 INPUT중 빈값이 있다면 valid는 false이고, 버튼은 !valid이기 때문에 true가 됩니다. */}
+          {/* 이 경우 !valid가 true이기 때문에 버튼의 disabled속성이 true가 되어 비활성화 됩니다. */}
+          {/* CSS에서 button disabled가 true일 경우의 style을 별도로 지정해두었기 때문에 버튼이 비활성화라면 회색, 활성화라면 주황색입니다. */}
+          <button disabled={!valid} onClick={handleClick}>
+            등록하기
+          </button>
+        </>
+      );
+    }
+
+    function InputField({ id, placeholder, onChange, value, required }) {
+      //** 각 인풋의 제목이 되는 innerText변경을 위해 새로운 객체를 선언하였습니다. */
+      //** props로 전달받을 id를 하드코딩하여 객체 내부에 key값으로 박아넣습니다. */
+      //** 해당 내용은 추후 innerText 교체를 위해 props.id와 대조하여 활용할 예정입니다. */
+      const innerText = {
+        author__ID: "작성자",
+        password__ID: "비밀번호",
+        title__ID: "제목",
+        content__ID: "내용",
+        youtube__ID: "링크",
+      };
+
+      return (
+        //** 각 input field별로 유동적인 css 적용을 위해 id로 class를 구분하였습니다. */
+        <fieldset className={id}>
+          <label>
+            {/* 선언한 객체 innerText에 [id]로 key를 호출하여 해당하는 한글명을 불러옵니다 */}
+            {/* 이렇게 할 경우 굳이 한글명을 위해 props을 따로 내려주지 않을 수 있어 코드 다이어트가 가능합니다 */}
+            {/* innerText.author__ID = "작성지", ... 이런식 */}
+            {innerText[id]}
+
+            {/* 필수값은 required라는 이름으로 props을 내려주었습니다. */}
+            {/* 만약 props에 required가 있다면 *을 보여주고 없다면 공란으로 처리하여 b태그를 삭제합니다 */}
+            <b>{required ? " *" : ""}</b>
+
+            {/* 만약 id가 content라면, textarea를 생성하고, 아닐경우 input을 생성합니다 */}
+            {/* 이러한 조건 없이 input과 textarea를 구분지으려면 props로 내려주어 할당시킬 수도 있습니다 */}
+            {id === "content__ID" ? (
+              <textarea id={id} placeholder={placeholder} onChange={onChange} />
+            ) : (
+              <input
+                id={id}
+                type={id === "password__ID" ? "password" : "text"}
+                placeholder={placeholder}
+                onChange={onChange}
+              />
+            )}
+
+            {/* input이 label내부에 있기 때문에 HTMLfor을 지정하지 않아도 제목을 누르면 자동으로 input에 focus가 됩니다 */}
+          </label>
+
+          {/* component를 호출할 때 각 state를 value라는 이름의 props으로 내려주었습니다 */}
+
+          {/* 만약 전달받은 value(props)가 있거나, required props가 없다면, 둘 중 어떤 조건이든 <br />태그로 해당 라인을 통째로 넘겨버립니다. */}
+          {/* 따라서, value는 없는데 required가 있는 경우에만 "필수입력" 메세지를 보여줍니다 */}
+          {/* 기본값으로 필수입력 인풋들은 메세지를 달고 있고, 링크같은 비필수 입력란은 메세지 없지 행을 넘기고 있습니다 */}
+
+          {/* value는 상위컴포넌트에서 관리되는 state를 쌩으로 꽂아 넣었기 때문에 changeEvent에 대응할 수 있습니다 */}
+          {/* 따라서, input의 value가 변경될 때 마다 해당 조건을 실시간으로 검토하여 "필수입력" 메세지가 토글될 수 있습니다 */}
+          {/* 만약 input value가 변경되면서 state가 갱신되면, component가 re-render되어 "필수입력" 메세지가 삭제됩니다 */}
+          <b>{value || !required ? <br /> : "필수입력 사항 입니다."}</b>
+        </fieldset>
+      );
+    }
+
+    const Root = document.getElementById("root");
+    ReactDOM.render(<App />, Root);
+  </script>
+</html>
